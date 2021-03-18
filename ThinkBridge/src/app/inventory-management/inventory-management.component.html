@@ -1,0 +1,93 @@
+<div class="container">
+  <div class="row align-items-start mt-2">
+    <div class="col-lg-4 col-md-12 col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ isEdit ? "Update Item" : "Insert Item" }}
+          </h5>
+          <form [formGroup]="inventoryForm" (ngSubmit)="saveItem()">
+            <div class="form-floating mb-1">
+              <input
+                type="test"
+                class="form-control"
+                id="floatingInput"
+                placeholder="Name"
+                formControlName="name"
+              />
+              <label for="floatingInput">Name</label>
+            </div>
+            <div class="form-floating mb-1">
+              <textarea
+                class="form-control"
+                placeholder="Enter a description here"
+                id="floatingTextarea"
+                style="height: 100px"
+                formControlName="description"
+              ></textarea>
+              <label for="floatingTextarea">Description</label>
+            </div>
+            <div class="form-floating mb-2">
+              <input
+                type="number"
+                class="form-control"
+                id="floatingPrice"
+                placeholder="Price"
+                formControlName="price"
+              />
+              <label for="floatingPrice">Price</label>
+            </div>
+            <input
+              type="submit"
+              class="btn btn-primary form-control mb-2"
+              [disabled]="!inventoryForm.valid"
+              value="{{ isEdit ? 'Update' : 'Save' }}"
+            />
+            <input
+              class="btn btn-primary form-control"
+              value="Clear"
+              (click)="resetValue()"
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8 col-md-12 col-sm-12">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">price</th>
+            <th scope="col">Description</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ item.name }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.description }}</td>
+            <td>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary"
+                  (click)="editItem(item)"
+                >
+                  edit
+                </button>&nbsp;
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger"
+                  (click)="deleteItem(item.id)"
+                >
+                  delete
+                </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
