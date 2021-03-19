@@ -1,7 +1,7 @@
 # Think Bridge
 
 ## Steps to run project
-1. Clone project using this command `https://github.com/pranjalibadhe19/ThinkBridge.git`
+1. Clone project using this link `https://github.com/pranjalibadhe19/ThinkBridge.git`
 2. Open terminal/console and install npm packages using `npm install` command at `ThinkBridge/ThinkBridge` location
 3. Then run `ng serve`
 4. Open `http://localhost:4200/`
