@@ -46,6 +46,7 @@ export class InventoryManagementComponent implements OnInit {
         }
       );
     }
+    this.inventoryForm.reset();
   }
 
   getItems() {
