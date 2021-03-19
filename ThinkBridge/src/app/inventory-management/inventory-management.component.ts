@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InventoryService } from '../services/inventory.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-inventory-management',
@@ -12,10 +11,7 @@ export class InventoryManagementComponent implements OnInit {
   items = [];
   isEdit = false;
   itemId;
-  constructor(
-    private inventoryService: InventoryService,
-    private spinnerService: NgxSpinnerService
-  ) {}
+  constructor(private inventoryService: InventoryService) {}
 
   ngOnInit(): void {
     this.getItems();
@@ -30,21 +26,17 @@ export class InventoryManagementComponent implements OnInit {
   saveItem() {
     if (this.isEdit) {
       console.log(this.inventoryForm);
-      this.spinnerService.show();
       this.inventoryService
         .updateItem(this.itemId, this.inventoryForm.value)
         .subscribe(resp => {
-          this.spinnerService.hide();
           this.inventoryService.success('Item updated successfully.');
           this.getItems();
           console.log(resp);
         });
     } else {
       console.log(this.inventoryForm);
-      this.spinnerService.show();
       this.inventoryService.saveItem(this.inventoryForm.value).subscribe(
         resp => {
-          this.spinnerService.hide();
           this.inventoryService.success('Item saved successfully.');
           this.getItems();
           console.log(resp);
@@ -57,10 +49,8 @@ export class InventoryManagementComponent implements OnInit {
   }
 
   getItems() {
-    this.spinnerService.show();
     this.inventoryService.getItemList().subscribe(
       (resp: any) => {
-        this.spinnerService.hide();
         this.items = [];
         for (let key in resp) {
           resp[key]['id'] = key;
@@ -75,10 +65,8 @@ export class InventoryManagementComponent implements OnInit {
   }
 
   deleteItem(itemId) {
-    this.spinnerService.show();
     this.inventoryService.deleteItem(itemId).subscribe(
       (resp: any) => {
-        this.spinnerService.hide();
         this.inventoryService.success('Item deleted successfully.');
         this.getItems();
       },
