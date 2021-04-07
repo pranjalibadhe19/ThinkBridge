@@ -1,93 +1,266 @@
 <div class="container">
   <div class="row align-items-start mt-2">
-    <div class="col-lg-4 col-md-12 col-sm-12">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">
-            {{ isEdit ? "Update Item" : "Insert Item" }}
-          </h5>
-          <form [formGroup]="inventoryForm" (ngSubmit)="saveItem()">
-            <div class="form-floating mb-1">
-              <input
-                type="test"
-                class="form-control"
-                id="floatingInput"
-                placeholder="Name"
-                formControlName="name"
-              />
-              <label for="floatingInput">Name</label>
+    <div class="col-lg-4 col-md-12 col-sm-12 float-end mr-2">
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search Items"
+          [(ngModel)]="searchItem"
+        />
+      </div>
+    </div>
+    <div class="col-lg-5 col-md-12 col-sm-12"></div>
+    <div class="col-lg-3 col-md-12 col-sm-12">
+      <button
+        class="btn btn-outline-primary btn-add-item"
+        (click)="openModal('md', addItem)"
+      >
+        Add Item
+      </button>
+      <button class="btn btn-outline-primary" (click)="thumbnailView()">
+        {{ isThumbnailView ? "Table View" : "Thumbnail View" }}
+      </button>
+    </div>
+    <div class="row align-items-start mt-2 mb-2" *ngIf="isThumbnailView">
+      <div
+        *ngFor="
+          let item of items
+            | filter: searchItem
+            | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize;
+          let i = index
+        "
+        class="col-lg-3 col-md-6 col-sm-12"
+      >
+        <div class="card">
+          <img [src]="item.fileSource" class="card-img-top" alt="..." />
+          <div class="card-body">
+            <h5 class="card-title">{{ item.name }}</h5>
+            <div class="price">
+              <b>Price</b> |
+              <span>{{ item.price }}</span>
             </div>
-            <div class="form-floating mb-1">
-              <textarea
-                class="form-control"
-                placeholder="Enter a description here"
-                id="floatingTextarea"
-                style="height: 100px"
-                formControlName="description"
-              ></textarea>
-              <label for="floatingTextarea">Description</label>
-            </div>
-            <div class="form-floating mb-2">
-              <input
-                type="number"
-                class="form-control"
-                id="floatingPrice"
-                placeholder="Price"
-                formControlName="price"
-              />
-              <label for="floatingPrice">Price</label>
-            </div>
-            <input
-              type="submit"
-              class="btn btn-primary form-control mb-2"
-              [disabled]="!inventoryForm.valid"
-              value="{{ isEdit ? 'Update' : 'Save' }}"
-            />
-            <input
-              class="btn btn-primary form-control"
-              value="Clear"
-              (click)="resetValue()"
-            />
-          </form>
+            <p class="card-text short-desc">
+              {{ item.description }}
+            </p>
+            <button
+              type="button"
+              class="btn-add-item btn btn-sm btn-primary"
+              (click)="openModal('md', content, item)"
+            >
+              view
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm btn-primary"
+              (click)="editItem(item, addItem)"
+            >
+              edit</button
+            >&nbsp;
+            <button
+              type="button"
+              class="btn btn-sm btn-danger"
+              (click)="deleteItem(item.id)"
+            >
+              delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-8 col-md-12 col-sm-12">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">price</th>
-            <th scope="col">Description</th>
-            <th scope="col" style="width:18%">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of items; let i = index">
-            <th scope="row">{{ i + 1 }}</th>
-            <td>{{ item.name }}</td>
-            <td>{{ item.price }}</td>
-            <td>{{ item.description }}</td>
-            <td>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-primary"
-                  (click)="editItem(item)"
-                >
-                  edit
-                </button>&nbsp;
-                <button
-                  type="button"
-                  class="btn btn-sm btn-danger"
-                  (click)="deleteItem(item.id)"
-                >
-                  delete
-                </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <table class="table table-bordered" *ngIf="!isThumbnailView">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">price</th>
+          <th scope="col">Description</th>
+          <th scope="col">Image</th>
+          <th scope="col" style="width:18%">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let item of items
+              | filter: searchItem
+              | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize;
+            let i = index
+          "
+        >
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ item.name }}</td>
+          <td>{{ item.price }}</td>
+          <td>{{ item.description }}</td>
+          <td>
+            <img
+              [src]="item.fileSource"
+              *ngIf="item.fileSource"
+              style="height: 50px; width:100px"
+              class="mb-2"
+            />
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-sm btn-primary"
+              (click)="openModal('md', content, item)"
+            >
+              view</button
+            >&nbsp;
+            <button
+              type="button"
+              class="btn btn-sm btn-primary"
+              (click)="editItem(item, addItem)"
+            >
+              edit</button
+            >&nbsp;
+            <button
+              type="button"
+              class="btn btn-sm btn-danger"
+              (click)="deleteItem(item.id)"
+            >
+              delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ngb-pagination
+      class="d-flex justify-content-end"
+      [collectionSize]="items.length"
+      [(page)]="page"
+      [maxSize]="3"
+      [pageSize]="pageSize"
+      [rotate]="true"
+      [ellipses]="false"
+      [boundaryLinks]="true"
+    ></ngb-pagination>
   </div>
 </div>
+
+<ng-template #addItem let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ isEdit ? "Update Item" : "Insert Item" }}</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card-body">
+      <form [formGroup]="inventoryForm" (ngSubmit)="saveItem()">
+        <div class="form-floating mb-1">
+          <input
+            type="test"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Name"
+            formControlName="name"
+          />
+          <label for="floatingInput">Name</label>
+        </div>
+        <div class="form-floating mb-1">
+          <textarea
+            class="form-control"
+            placeholder="Enter a description here"
+            id="floatingTextarea"
+            style="height: 100px"
+            formControlName="description"
+          ></textarea>
+          <label for="floatingTextarea">Description</label>
+        </div>
+        <div class="form-floating mb-2">
+          <input
+            type="number"
+            class="form-control"
+            id="floatingPrice"
+            placeholder="Price"
+            formControlName="price"
+          />
+          <label for="floatingPrice">Price</label>
+        </div>
+        <div class="form-group">
+          <label for="file">Image</label>
+          <input
+            formControlName="file"
+            id="file"
+            type="file"
+            class="form-control mb-2"
+            (change)="onFileChange($event)"
+          />
+        </div>
+        <img
+          [src]="imageSrc"
+          *ngIf="imageSrc"
+          style="height: 200px; width:260px"
+          class="mb-2"
+        />
+        <input
+          type="submit"
+          class="btn btn-primary form-control mb-2"
+          [disabled]="!inventoryForm.valid"
+          value="{{ isEdit ? 'Update' : 'Save' }}"
+        />
+        <input
+          class="btn btn-primary form-control"
+          value="Clear"
+          (click)="resetValue()"
+        />
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Detail View</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card-body">
+      <div class="card">
+        <img [src]="viewItem.fileSource" class="card-img-top" alt="..." />
+        <div class="card-body">
+          <h5 class="card-title">{{ viewItem.name }}</h5>
+          <div class="price">
+            <b>Price</b> |
+            <span>{{ viewItem.price }}</span>
+          </div>
+          <p class="card-text">
+            {{ viewItem.description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

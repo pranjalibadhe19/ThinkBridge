@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InventoryService } from '../services/inventory.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-inventory-management',
@@ -11,7 +12,16 @@ export class InventoryManagementComponent implements OnInit {
   items = [];
   isEdit = false;
   itemId;
-  constructor(private inventoryService: InventoryService) {}
+  page = 1;
+  pageSize = 4;
+  searchItem = '';
+  imageSrc;
+  isThumbnailView = false;
+  viewItem;
+  constructor(
+    private inventoryService: InventoryService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.getItems();
@@ -20,7 +30,9 @@ export class InventoryManagementComponent implements OnInit {
   inventoryForm = new FormGroup({
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
-    price: new FormControl('', Validators.required)
+    price: new FormControl('', Validators.required),
+    file: new FormControl(''),
+    fileSource: new FormControl('')
   });
 
   saveItem() {
@@ -46,7 +58,7 @@ export class InventoryManagementComponent implements OnInit {
         }
       );
     }
-    this.inventoryForm.reset();
+    this.resetValue();
   }
 
   getItems() {
@@ -77,16 +89,43 @@ export class InventoryManagementComponent implements OnInit {
     );
   }
 
-  editItem(item) {
+  editItem(item, content) {
     this.isEdit = true;
     this.itemId = item.id;
     this.inventoryForm.controls.name.setValue(item.name);
     this.inventoryForm.controls.price.setValue(item.price);
     this.inventoryForm.controls.description.setValue(item.description);
+    this.imageSrc = item.fileSource;
+    this.modalService.open(content, { size: 'md' });
   }
 
   resetValue() {
     this.isEdit = false;
+    this.imageSrc = '';
     this.inventoryForm.reset();
+  }
+
+  onFileChange(event) {
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imageSrc = reader.result as string;
+        this.inventoryForm.patchValue({
+          fileSource: reader.result
+        });
+      };
+    }
+  }
+
+  openModal(size, content, item?) {
+    this.viewItem = item;
+    this.resetValue();
+    this.modalService.open(content, { size: size });
+  }
+
+  thumbnailView() {
+    this.isThumbnailView = !this.isThumbnailView;
   }
 }

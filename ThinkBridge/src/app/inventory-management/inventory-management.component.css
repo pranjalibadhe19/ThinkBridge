@@ -1,0 +1,17 @@
+.short-desc {
+  overflow: hidden;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.price {
+  font-size: 15px;
+  color: #737373;
+  padding: 10px 30px 10px 0px;
+}
+
+.btn-add-item {
+  margin-right: 10px;
+}
