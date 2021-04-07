@@ -10,6 +10,14 @@
 In this project I'm using `Google Firebase` for server API calls
 Firebase URL: `https://my-http-project-7dce1-default-rtdb.firebaseio.com/posts.json`
 
+## Screenshots
+#1. ![Screenshot 1](https://github.com/pranjalibadhe19/ThinkBridge/blob/master/ProjectScreenshot/Modified%20Project%20Screenshot/Add%20Item.png)
+#2. ![Screenshot 1](https://github.com/pranjalibadhe19/ThinkBridge/blob/master/ProjectScreenshot/Modified%20Project%20Screenshot/Detail View.png)
+#3. ![Screenshot 1](https://github.com/pranjalibadhe19/ThinkBridge/blob/master/ProjectScreenshot/Modified%20Project%20Screenshot/Edit Item.png)
+#4. ![Screenshot 1](https://github.com/pranjalibadhe19/ThinkBridge/blob/master/ProjectScreenshot/Modified%20Project%20Screenshot/Pagination.png)
+#5. ![Screenshot 1](https://github.com/pranjalibadhe19/ThinkBridge/blob/master/ProjectScreenshot/Modified%20Project%20Screenshot/Search Item.png)
+#6. ![Screenshot 1](https://github.com/pranjalibadhe19/ThinkBridge/blob/master/ProjectScreenshot/Modified%20Project%20Screenshot/Table View.png)
+#7. ![Screenshot 1](https://github.com/pranjalibadhe19/ThinkBridge/blob/master/ProjectScreenshot/Modified%20Project%20Screenshot/frontend.png)
 
 ## Screenshots
 #1. Inventory Dashboard ![Screenshot 1](https://github.com/pranjalibadhe19/ThinkBridge/blob/master/ProjectScreenshot/full_page.png)
